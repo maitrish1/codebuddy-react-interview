@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 import faker from 'faker';
 import { v4 as uuid } from 'uuid';
 
-const API_URL = 'https://codebuddy.review';
+export const API_URL = 'https://codebuddy.review';
 
 const isPrime = (n, i = 2) => {
   if (n === 0 || n === 1) return false;
