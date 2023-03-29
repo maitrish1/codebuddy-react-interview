@@ -8,8 +8,8 @@ import Avatar from '@mui/material/Avatar';
 // import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
-import { API_URL } from '../mocks/handlers';
 import Fallback from '../Fallback';
+import fetchPosts from '../functions/Posts';
 
 // import FavoriteIcon from '@mui/icons-material/Favorite';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -18,12 +18,9 @@ function Posts() {
   const [loading, setloading] = useState(true);
   const [allPosts, setPosts] = useState([]);
   const fetchh = async () => {
-    const temp = await fetch(`${API_URL}/posts`);
-    const res = await temp.json();
-    setPosts(res.data.posts);
+    const temp = await fetchPosts();
+    setPosts(temp);
     setloading(false);
-    console.log(res);
-    console.log(allPosts);
   };
 
   useEffect(() => {

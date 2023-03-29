@@ -8,6 +8,7 @@ import StepLabel from '@mui/material/StepLabel';
 // import Typography from '@mui/material/Typography';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
+import Submit from '../functions/Formsubmit';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Home = () => {
     countryCode: '',
     phoneNumber: '',
   });
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
 
   const [emailerror, setemailerror] = useState(false);
   const [passerror, setpasserror] = useState(false);
@@ -28,16 +29,33 @@ const Home = () => {
   const [addresserror, setaddresserror] = useState(false);
   const [phoneerror, setphoneerror] = useState(false);
   const [countrycodeerror, setcountrycodeerror] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+
   const handleChange = event => {
     setChecked(event.target.checked);
   };
 
   const steps = ['Form 1', 'Form 2', 'Form 3'];
-  const onSubmit = () => navigate('/posts');
-  const [activeStep, setActiveStep] = useState(0);
+  const onSubmit = async () => {
+    if (!checked) {
+      // eslint-disable-next-line no-alert
+      window.alert('check please');
+    } else if (formvalues.phoneNumber.length < 10) {
+      setphoneerror(true);
+    } else if (!formvalues.countryCode) {
+      setcountrycodeerror(true);
+    } else {
+      setphoneerror(false);
+      setcountrycodeerror(false);
+      setActiveStep(prevActiveStep => prevActiveStep + 1);
+      const temp = await Submit(formvalues);
+      if (temp.message === 'Success') {
+        navigate('/posts');
+      }
+    }
+  };
 
   const handleNext = () => {
-    console.log(activeStep);
     if (activeStep === 0) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formvalues.emailId)) {
         setemailerror(true);
@@ -67,18 +85,6 @@ const Home = () => {
       } else {
         setaddresserror(false);
         setfirstnameerror(false);
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
-      }
-    } else if (activeStep === 2) {
-      if (!checked) {
-        window.alert('check please');
-      } else if (formvalues.phoneNumber.length < 10) {
-        setphoneerror(true);
-      } else if (!formvalues.countryCode) {
-        setcountrycodeerror(true);
-      } else {
-        setphoneerror(false);
-        setcountrycodeerror(false);
         setActiveStep(prevActiveStep => prevActiveStep + 1);
       }
     }
@@ -240,7 +246,7 @@ const Home = () => {
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={activeStep === steps.length - 1 ? onSubmit : handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
             </Button>
           </Box>
         </div>
